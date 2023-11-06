@@ -1,0 +1,100 @@
+{
+	"name": "scrape_data_innerloop_pl",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup Tea Types",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "data_tea_types_csv",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach Tea Type",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup Tea Types",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup Tea Types').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Scrape Ebay Function",
+							"type": "AzureFunctionActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"functionName": "scrape_ebay_fns",
+								"method": "POST",
+								"body": {
+									"value": "@replace(concat('{\"scrape_date\":\"Sold  Nov 5, 2023\",','\"country\":\"',pipeline().parameters.Country,'\",\"tea_type\":\"',item().tea_type,'\"}'),'\\','')",
+									"type": "Expression"
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "scrape_ebay_fns_ls",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"Country": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"country": {
+				"type": "Array"
+			},
+			"tea_type": {
+				"type": "Array"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-11-06T06:28:59Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

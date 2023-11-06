@@ -1,0 +1,19 @@
+{
+	"name": "processed_scraped_data_json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "raw_storage_ls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "processed"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,9 @@
+{
+	"name": "demand-forecasting-ebay-adf",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "4b711e36-1e3b-441f-851c-1c372f02d987",
+		"tenantId": "1eb8a2dd-6e6d-4454-807b-e9ec120a9e1f"
+	}
+}

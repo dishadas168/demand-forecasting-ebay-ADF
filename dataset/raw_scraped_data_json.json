@@ -1,0 +1,42 @@
+{
+	"name": "raw_scraped_data_json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "raw_storage_ls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "output.json",
+				"fileSystem": "raw"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"purchase_option": {
+					"type": "string"
+				},
+				"page": {
+					"type": "integer"
+				},
+				"date_sold": {
+					"type": "string"
+				},
+				"price": {
+					"type": "string"
+				},
+				"bids": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
