@@ -1,0 +1,21 @@
+{
+	"name": "scrape_data_daily_pl",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute scrape_data_outerloop",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "scrape_data_outerloop_pl",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": []
+	}
+}

@@ -12,6 +12,12 @@
 				"parameters": {
 					"date": "@trigger().startTime"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "scrape_data_daily_pl",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
