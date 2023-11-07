@@ -1,0 +1,25 @@
+{
+	"name": "scrape_data_history_pl",
+	"properties": {
+		"activities": [
+			{
+				"name": "Store raw data in Databricks Hive metastore",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "demand_forecasting_ebay_db_ls",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
