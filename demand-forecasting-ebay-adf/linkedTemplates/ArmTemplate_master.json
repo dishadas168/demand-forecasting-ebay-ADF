@@ -25,7 +25,7 @@
 		},
 		"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
 			"type": "string",
-			"defaultValue": "@trigger().scheduledTime"
+			"defaultValue": "@trigger().startTime"
 		},
 		"containerUri": {
 			"type": "string",
