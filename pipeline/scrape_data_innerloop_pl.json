@@ -67,7 +67,7 @@
 								"functionName": "scrape_ebay_fns",
 								"method": "POST",
 								"body": {
-									"value": "@replace(concat('{\"scrape_date\":\"Sold  Nov 5, 2023\",','\"country\":\"',pipeline().parameters.Country,'\",\"tea_type\":\"',item().tea_type,'\"}'),'\\','')",
+									"value": "@replace(concat('{\"scrape_date\":\"',pipeline().parameters.date,'\",\"country\":\"',pipeline().parameters.Country,'\",\"tea_type\":\"',item().tea_type,'\"}'),'\\','')",
 									"type": "Expression"
 								}
 							},
@@ -82,6 +82,9 @@
 		],
 		"parameters": {
 			"Country": {
+				"type": "string"
+			},
+			"date": {
 				"type": "string"
 			}
 		},

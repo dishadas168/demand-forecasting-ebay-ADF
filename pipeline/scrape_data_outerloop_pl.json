@@ -61,6 +61,10 @@
 									"Country": {
 										"value": "@item().country",
 										"type": "Expression"
+									},
+									"date": {
+										"value": "@pipeline().parameters.date",
+										"type": "Expression"
 									}
 								}
 							}
