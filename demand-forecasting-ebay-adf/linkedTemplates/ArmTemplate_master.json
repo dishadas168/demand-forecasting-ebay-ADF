@@ -39,6 +39,10 @@
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
 		},
+		"scrape_ebay_daily_properties_pipeline1_parameters_date": {
+			"type": "string",
+			"defaultValue": "@trigger().startTime"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -89,6 +93,9 @@
 					},
 					"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
 						"value": "[parameters('scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date')]"
+					},
+					"scrape_ebay_daily_properties_pipeline1_parameters_date": {
+						"value": "[parameters('scrape_ebay_daily_properties_pipeline1_parameters_date')]"
 					}
 				}
 			},

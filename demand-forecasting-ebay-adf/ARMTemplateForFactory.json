@@ -38,6 +38,10 @@
 		"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
+		},
+		"scrape_ebay_daily_properties_pipeline1_parameters_date": {
+			"type": "string",
+			"defaultValue": "@trigger().startTime"
 		}
 	},
 	"variables": {
@@ -63,7 +67,13 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/02_Incremental_Load_Bronze"
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/02_Incremental_Load_Bronze",
+							"baseParameters": {
+								"date": {
+									"value": "@pipeline().parameters.date",
+									"type": "Expression"
+								}
+							}
 						},
 						"linkedServiceName": {
 							"referenceName": "demand_forecasting_ebay_db_ls",
@@ -73,6 +83,11 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"date": {
+						"type": "string"
+					}
 				},
 				"annotations": []
 			},
@@ -738,7 +753,9 @@
 							"referenceName": "pipeline1",
 							"type": "PipelineReference"
 						},
-						"parameters": {}
+						"parameters": {
+							"date": "[parameters('scrape_ebay_daily_properties_pipeline1_parameters_date')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
