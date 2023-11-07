@@ -34,12 +34,133 @@
 		"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
+		},
+		"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
+			"type": "string",
+			"defaultValue": "@trigger().startTime"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/scrape_data_daily_pl')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Execute scrape_data_outerloop",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "scrape_data_outerloop_pl",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"date": {
+									"value": "@pipeline().parameters.date",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "Wait 5 min",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "Execute scrape_data_outerloop",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 300
+						}
+					},
+					{
+						"name": "Store raw data in Hive metastore",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Wait 5 min",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/02_Incremental_Load_Bronze",
+							"baseParameters": {
+								"date": {
+									"value": "@pipeline().parameters.date",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Process raw",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Store raw data in Hive metastore",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/03_Transform_Data_Silver"
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"date": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/scrape_data_outerloop_pl')]",
+				"[concat(variables('factoryId'), '/linkedServices/demand_forecasting_ebay_db_ls')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/scrape_data_history_pl')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -556,7 +677,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -565,6 +686,15 @@
 						},
 						"parameters": {
 							"date": "[parameters('scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date')]"
+						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "scrape_data_daily_pl",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"date": "[parameters('scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date')]"
 						}
 					}
 				],
@@ -580,7 +710,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/scrape_data_outerloop_pl')]"
+				"[concat(variables('factoryId'), '/pipelines/scrape_data_outerloop_pl')]",
+				"[concat(variables('factoryId'), '/pipelines/scrape_data_daily_pl')]"
 			]
 		}
 	]
