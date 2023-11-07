@@ -2,7 +2,7 @@
 	"name": "scrape_ebay_daily",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
@@ -20,6 +20,12 @@
 				},
 				"parameters": {
 					"date": "@trigger().startTime"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pipeline1",
+					"type": "PipelineReference"
 				}
 			}
 		],
