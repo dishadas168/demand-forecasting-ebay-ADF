@@ -1,0 +1,18 @@
+{
+	"name": "scrape_ebay_daily",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 24,
+				"startTime": "2023-11-06T00:10:00",
+				"endTime": "2023-11-30T04:11:00",
+				"timeZone": "Central Standard Time"
+			}
+		}
+	}
+}
