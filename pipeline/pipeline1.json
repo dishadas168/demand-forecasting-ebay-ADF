@@ -15,7 +15,13 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/02_Incremental_Load_Bronze"
+					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/02_Incremental_Load_Bronze",
+					"baseParameters": {
+						"date": {
+							"value": "@pipeline().parameters.date",
+							"type": "Expression"
+						}
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "demand_forecasting_ebay_db_ls",
@@ -23,6 +29,11 @@
 				}
 			}
 		],
+		"parameters": {
+			"date": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
