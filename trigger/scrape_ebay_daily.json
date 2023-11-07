@@ -17,6 +17,9 @@
 				"pipelineReference": {
 					"referenceName": "scrape_data_daily_pl",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"date": "@trigger().startTime"
 				}
 			}
 		],
