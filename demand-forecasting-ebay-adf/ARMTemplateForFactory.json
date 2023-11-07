@@ -51,7 +51,7 @@
 						"type": "DatabricksNotebook",
 						"dependsOn": [
 							{
-								"activity": "Execute scrape_pipeline",
+								"activity": "Wait for Inner Pipelines",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -112,6 +112,22 @@
 						"linkedServiceName": {
 							"referenceName": "demand_forecasting_ebay_db_ls",
 							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Wait for Inner Pipelines",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "Execute scrape_pipeline",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 900
 						}
 					}
 				],
