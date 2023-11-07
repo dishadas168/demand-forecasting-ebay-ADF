@@ -2,7 +2,7 @@
 	"name": "scrape_ebay_daily",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
@@ -28,7 +28,7 @@
 			"recurrence": {
 				"frequency": "Hour",
 				"interval": 24,
-				"startTime": "2023-11-07T23:59:00",
+				"startTime": "2023-11-08T14:16:00",
 				"endTime": "2023-11-30T04:11:00",
 				"timeZone": "Central Standard Time"
 			}
