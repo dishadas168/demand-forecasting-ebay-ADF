@@ -31,10 +31,6 @@
 			"type": "string",
 			"defaultValue": "https://scrape-ebay-fns.azurewebsites.net"
 		},
-		"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
-			"type": "string",
-			"defaultValue": "@trigger().startTime"
-		},
 		"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
@@ -90,9 +86,6 @@
 					},
 					"trigger1_properties_pipeline1_parameters_date": {
 						"value": "[parameters('trigger1_properties_pipeline1_parameters_date')]"
-					},
-					"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
-						"value": "[parameters('scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date')]"
 					},
 					"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
 						"value": "[parameters('scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date')]"

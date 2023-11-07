@@ -35,10 +35,6 @@
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
 		},
-		"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
-			"type": "string",
-			"defaultValue": "@trigger().startTime"
-		},
 		"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
@@ -770,15 +766,6 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "scrape_data_outerloop_pl",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"date": "[parameters('scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date')]"
-						}
-					},
-					{
-						"pipelineReference": {
 							"referenceName": "scrape_data_daily_pl",
 							"type": "PipelineReference"
 						},
@@ -799,7 +786,6 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/scrape_data_outerloop_pl')]",
 				"[concat(variables('factoryId'), '/pipelines/scrape_data_daily_pl')]"
 			]
 		}

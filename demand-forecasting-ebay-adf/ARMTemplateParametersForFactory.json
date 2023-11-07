@@ -23,9 +23,6 @@
 		"scrape_ebay_fns_ls_properties_typeProperties_functionAppUrl": {
 			"value": "https://scrape-ebay-fns.azurewebsites.net"
 		},
-		"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
-			"value": "@trigger().startTime"
-		},
 		"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
 			"value": "@trigger().startTime"
 		},
