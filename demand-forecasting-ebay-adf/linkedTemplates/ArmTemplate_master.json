@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "demand-forecasting-ebay-adf"
 		},
+		"demand_forecasting_ebay_db_ls_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'demand_forecasting_ebay_db_ls'"
+		},
 		"raw_storage_ls_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'raw_storage_ls'"
@@ -14,6 +18,10 @@
 		"scrape_ebay_fns_ls_functionKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'functionKey' of 'scrape_ebay_fns_ls'"
+		},
+		"demand_forecasting_ebay_db_ls_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "1107-034422-l1dw67oe"
 		},
 		"raw_storage_ls_properties_typeProperties_url": {
 			"type": "string",
@@ -54,11 +62,17 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"demand_forecasting_ebay_db_ls_accessToken": {
+						"value": "[parameters('demand_forecasting_ebay_db_ls_accessToken')]"
+					},
 					"raw_storage_ls_accountKey": {
 						"value": "[parameters('raw_storage_ls_accountKey')]"
 					},
 					"scrape_ebay_fns_ls_functionKey": {
 						"value": "[parameters('scrape_ebay_fns_ls_functionKey')]"
+					},
+					"demand_forecasting_ebay_db_ls_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('demand_forecasting_ebay_db_ls_properties_typeProperties_existingClusterId')]"
 					},
 					"raw_storage_ls_properties_typeProperties_url": {
 						"value": "[parameters('raw_storage_ls_properties_typeProperties_url')]"

@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "demand-forecasting-ebay-adf"
 		},
+		"demand_forecasting_ebay_db_ls_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'demand_forecasting_ebay_db_ls'"
+		},
 		"raw_storage_ls_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'raw_storage_ls'"
@@ -14,6 +18,10 @@
 		"scrape_ebay_fns_ls_functionKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'functionKey' of 'scrape_ebay_fns_ls'"
+		},
+		"demand_forecasting_ebay_db_ls_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "1107-034422-l1dw67oe"
 		},
 		"raw_storage_ls_properties_typeProperties_url": {
 			"type": "string",
@@ -32,6 +40,24 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/demand_forecasting_ebay_db_ls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-5817605248122673.13.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('demand_forecasting_ebay_db_ls_accessToken')]"
+					},
+					"existingClusterId": "[parameters('demand_forecasting_ebay_db_ls_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/raw_storage_ls')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -66,6 +92,42 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/scrape_data_history_pl')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Store raw data in Databricks Hive metastore",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/01_Historical_Load_Bronze"
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/demand_forecasting_ebay_db_ls')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/data_countries_csv')]",
