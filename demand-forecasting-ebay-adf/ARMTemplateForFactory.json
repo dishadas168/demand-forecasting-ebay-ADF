@@ -39,7 +39,7 @@
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
 		},
-		"scrape_ebay_daily_properties_pipeline1_parameters_date": {
+		"trigger1_properties_pipeline1_parameters_date": {
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
 		}
@@ -728,7 +728,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -747,15 +747,6 @@
 						"parameters": {
 							"date": "[parameters('scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date')]"
 						}
-					},
-					{
-						"pipelineReference": {
-							"referenceName": "pipeline1",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"date": "[parameters('scrape_ebay_daily_properties_pipeline1_parameters_date')]"
-						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -771,7 +762,38 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/scrape_data_outerloop_pl')]",
-				"[concat(variables('factoryId'), '/pipelines/scrape_data_daily_pl')]",
+				"[concat(variables('factoryId'), '/pipelines/scrape_data_daily_pl')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pipeline1",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"date": "[parameters('trigger1_properties_pipeline1_parameters_date')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Hour",
+						"interval": 15,
+						"startTime": "2023-11-07T19:34:00",
+						"timeZone": "Central Standard Time"
+					}
+				}
+			},
+			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pipeline1')]"
 			]
 		}

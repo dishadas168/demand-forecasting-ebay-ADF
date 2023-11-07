@@ -39,7 +39,7 @@
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
 		},
-		"scrape_ebay_daily_properties_pipeline1_parameters_date": {
+		"trigger1_properties_pipeline1_parameters_date": {
 			"type": "string",
 			"defaultValue": "@trigger().startTime"
 		},
@@ -88,14 +88,14 @@
 					"scrape_ebay_fns_ls_properties_typeProperties_functionAppUrl": {
 						"value": "[parameters('scrape_ebay_fns_ls_properties_typeProperties_functionAppUrl')]"
 					},
+					"trigger1_properties_pipeline1_parameters_date": {
+						"value": "[parameters('trigger1_properties_pipeline1_parameters_date')]"
+					},
 					"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
 						"value": "[parameters('scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date')]"
 					},
 					"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
 						"value": "[parameters('scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date')]"
-					},
-					"scrape_ebay_daily_properties_pipeline1_parameters_date": {
-						"value": "[parameters('scrape_ebay_daily_properties_pipeline1_parameters_date')]"
 					}
 				}
 			},
