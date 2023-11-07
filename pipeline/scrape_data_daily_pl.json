@@ -90,7 +90,13 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/03_Transform_Data_Silver"
+					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/03_Transform_Data_Silver",
+					"baseParameters": {
+						"date": {
+							"value": "@pipeline().parameters.date",
+							"type": "Expression"
+						}
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "demand_forecasting_ebay_db_ls",
