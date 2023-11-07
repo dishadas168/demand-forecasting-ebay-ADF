@@ -5,7 +5,14 @@
 			{
 				"name": "Store raw data in Databricks Hive metastore",
 				"type": "DatabricksNotebook",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Execute scrape_pipeline",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -16,6 +23,46 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/01_Historical_Load_Bronze"
+				},
+				"linkedServiceName": {
+					"referenceName": "demand_forecasting_ebay_db_ls",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Execute scrape_pipeline",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "scrape_data_outerloop_pl",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Process raw data",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Store raw data in Databricks Hive metastore",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/03_Transform_Data_Silver"
 				},
 				"linkedServiceName": {
 					"referenceName": "demand_forecasting_ebay_db_ls",
