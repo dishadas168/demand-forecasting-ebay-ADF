@@ -98,6 +98,42 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/02_Incremental_Load_Bronze"
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/demand_forecasting_ebay_db_ls')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/data_countries_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -677,7 +713,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -696,6 +732,13 @@
 						"parameters": {
 							"date": "[parameters('scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date')]"
 						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pipeline1",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -711,7 +754,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/scrape_data_outerloop_pl')]",
-				"[concat(variables('factoryId'), '/pipelines/scrape_data_daily_pl')]"
+				"[concat(variables('factoryId'), '/pipelines/scrape_data_daily_pl')]",
+				"[concat(variables('factoryId'), '/pipelines/pipeline1')]"
 			]
 		}
 	]
