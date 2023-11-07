@@ -94,42 +94,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/scrape_data_history_pl')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Store raw data in Databricks Hive metastore",
-						"type": "DatabricksNotebook",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/01_Historical_Load_Bronze"
-						},
-						"linkedServiceName": {
-							"referenceName": "demand_forecasting_ebay_db_ls",
-							"type": "LinkedServiceReference"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/demand_forecasting_ebay_db_ls')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/data_countries_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -483,6 +447,91 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/data_countries_csv')]",
 				"[concat(variables('factoryId'), '/pipelines/scrape_data_innerloop_pl')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/scrape_data_history_pl')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Store raw data in Databricks Hive metastore",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Execute scrape_pipeline",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/01_Historical_Load_Bronze"
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Execute scrape_pipeline",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "scrape_data_outerloop_pl",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Process raw data",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Store raw data in Databricks Hive metastore",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/03_Transform_Data_Silver"
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/demand_forecasting_ebay_db_ls')]",
+				"[concat(variables('factoryId'), '/pipelines/scrape_data_outerloop_pl')]"
 			]
 		},
 		{
