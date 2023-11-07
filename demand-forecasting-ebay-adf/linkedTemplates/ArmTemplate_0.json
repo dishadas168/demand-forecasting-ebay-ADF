@@ -473,7 +473,7 @@
 					"recurrence": {
 						"frequency": "Hour",
 						"interval": 24,
-						"startTime": "2023-11-07T22:33:00",
+						"startTime": "2023-11-06T22:34:00",
 						"endTime": "2023-11-30T04:11:00",
 						"timeZone": "Central Standard Time"
 					}
