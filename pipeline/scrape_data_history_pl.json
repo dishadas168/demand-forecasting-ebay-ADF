@@ -14,6 +14,9 @@
 					"secureInput": false
 				},
 				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/01_Historical_Load_Bronze"
+				},
 				"linkedServiceName": {
 					"referenceName": "demand_forecasting_ebay_db_ls",
 					"type": "LinkedServiceReference"
