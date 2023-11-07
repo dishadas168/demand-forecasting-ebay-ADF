@@ -1,0 +1,77 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "demand-forecasting-ebay-adf"
+		},
+		"raw_storage_ls_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'raw_storage_ls'"
+		},
+		"scrape_ebay_fns_ls_functionKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'functionKey' of 'scrape_ebay_fns_ls'"
+		},
+		"raw_storage_ls_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://demandforecastingebaysa.dfs.core.windows.net/"
+		},
+		"scrape_ebay_fns_ls_properties_typeProperties_functionAppUrl": {
+			"type": "string",
+			"defaultValue": "https://scrape-ebay-fns.azurewebsites.net"
+		},
+		"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
+			"type": "string",
+			"defaultValue": "@trigger().scheduledTime"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "demand-forecasting-ebay-adf_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"raw_storage_ls_accountKey": {
+						"value": "[parameters('raw_storage_ls_accountKey')]"
+					},
+					"scrape_ebay_fns_ls_functionKey": {
+						"value": "[parameters('scrape_ebay_fns_ls_functionKey')]"
+					},
+					"raw_storage_ls_properties_typeProperties_url": {
+						"value": "[parameters('raw_storage_ls_properties_typeProperties_url')]"
+					},
+					"scrape_ebay_fns_ls_properties_typeProperties_functionAppUrl": {
+						"value": "[parameters('scrape_ebay_fns_ls_properties_typeProperties_functionAppUrl')]"
+					},
+					"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
+						"value": "[parameters('scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

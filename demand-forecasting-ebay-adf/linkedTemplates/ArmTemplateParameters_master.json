@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "demand-forecasting-ebay-adf"
+		},
+		"raw_storage_ls_accountKey": {
+			"value": ""
+		},
+		"scrape_ebay_fns_ls_functionKey": {
+			"value": ""
+		},
+		"raw_storage_ls_properties_typeProperties_url": {
+			"value": "https://demandforecastingebaysa.dfs.core.windows.net/"
+		},
+		"scrape_ebay_fns_ls_properties_typeProperties_functionAppUrl": {
+			"value": "https://scrape-ebay-fns.azurewebsites.net"
+		},
+		"scrape_ebay_daily_properties_scrape_data_outerloop_pl_parameters_date": {
+			"value": "@trigger().scheduledTime"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
