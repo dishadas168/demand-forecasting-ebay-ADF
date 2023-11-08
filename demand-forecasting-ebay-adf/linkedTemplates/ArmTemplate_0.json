@@ -31,9 +31,9 @@
 			"type": "string",
 			"defaultValue": "https://scrape-ebay-fns.azurewebsites.net"
 		},
-		"trigger1_properties_pipeline1_parameters_date": {
+		"trigger_ml_retraining_tr_properties_retrain_model_pl_parameters_date": {
 			"type": "string",
-			"defaultValue": "@trigger().startTime"
+			"defaultValue": "@trigger."
 		},
 		"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
 			"type": "string",
@@ -98,13 +98,13 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"name": "[concat(parameters('factoryName'), '/retrain_model_pl')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Notebook1",
+						"name": "Train Forecast model",
 						"type": "DatabricksNotebook",
 						"dependsOn": [],
 						"policy": {
@@ -116,13 +116,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/02_Incremental_Load_Bronze",
-							"baseParameters": {
-								"date": {
-									"value": "@pipeline().parameters.date",
-									"type": "Expression"
-								}
-							}
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/05_Train_Forecasting_Model_and_Deploy"
 						},
 						"linkedServiceName": {
 							"referenceName": "demand_forecasting_ebay_db_ls",
@@ -393,35 +387,35 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"name": "[concat(parameters('factoryName'), '/trigger_ml_retraining_tr')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "pipeline1",
+							"referenceName": "retrain_model_pl",
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"date": "[parameters('trigger1_properties_pipeline1_parameters_date')]"
+							"date": "[parameters('trigger_ml_retraining_tr_properties_retrain_model_pl_parameters_date')]"
 						}
 					}
 				],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Hour",
+						"frequency": "Day",
 						"interval": 15,
-						"startTime": "2023-11-07T13:44:00",
+						"startTime": "2023-11-07T02:40:00",
 						"timeZone": "Central Standard Time"
 					}
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pipeline1')]"
+				"[concat(variables('factoryId'), '/pipelines/retrain_model_pl')]"
 			]
 		},
 		{
@@ -638,6 +632,60 @@
 							"referenceName": "demand_forecasting_ebay_db_ls",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "Reporting Tables",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Process raw",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/04_Data_Transformation_For_PowerBI_Gold"
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Forecast Table",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Reporting Tables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/06_Forecast_Gold"
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {
@@ -744,6 +792,60 @@
 						"typeProperties": {
 							"waitTimeInSeconds": 900
 						}
+					},
+					{
+						"name": "Forecast Table",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Reporting Tables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/06_Forecast_Gold"
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Reporting Tables",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Process raw data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/04_Data_Transformation_For_PowerBI_Gold"
+						},
+						"linkedServiceName": {
+							"referenceName": "demand_forecasting_ebay_db_ls",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {
@@ -762,7 +864,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {

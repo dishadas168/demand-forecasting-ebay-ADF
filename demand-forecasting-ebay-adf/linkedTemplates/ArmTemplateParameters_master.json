@@ -26,8 +26,8 @@
 		"scrape_ebay_daily_properties_scrape_data_daily_pl_parameters_date": {
 			"value": "@trigger().startTime"
 		},
-		"trigger1_properties_pipeline1_parameters_date": {
-			"value": "@trigger().startTime"
+		"trigger_ml_retraining_tr_properties_retrain_model_pl_parameters_date": {
+			"value": "@trigger."
 		},
 		"containerUri": {
 			"value": ""
