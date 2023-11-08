@@ -102,6 +102,60 @@
 					"referenceName": "demand_forecasting_ebay_db_ls",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "Reporting Tables",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Process raw",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/04_Data_Transformation_For_PowerBI_Gold"
+				},
+				"linkedServiceName": {
+					"referenceName": "demand_forecasting_ebay_db_ls",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Forecast Table",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Reporting Tables",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/06_Forecast_Gold"
+				},
+				"linkedServiceName": {
+					"referenceName": "demand_forecasting_ebay_db_ls",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"parameters": {

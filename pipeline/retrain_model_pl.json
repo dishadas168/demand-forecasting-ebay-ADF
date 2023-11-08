@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "retrain_model_pl",
 	"properties": {
 		"activities": [
 			{
@@ -15,13 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/05_Train_Forecasting_Model_and_Deploy",
-					"baseParameters": {
-						"date": {
-							"value": "@pipeline().parameters.date",
-							"type": "Expression"
-						}
-					}
+					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/05_Train_Forecasting_Model_and_Deploy"
 				},
 				"linkedServiceName": {
 					"referenceName": "demand_forecasting_ebay_db_ls",
