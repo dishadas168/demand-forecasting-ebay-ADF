@@ -1,0 +1,27 @@
+{
+	"name": "trigger_ml_retraining_tr",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pipeline1",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"date": "@trigger."
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 15,
+				"startTime": "2023-11-07T02:40:00",
+				"timeZone": "Central Standard Time"
+			}
+		}
+	}
+}

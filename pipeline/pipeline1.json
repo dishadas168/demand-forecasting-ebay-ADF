@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Notebook1",
+				"name": "Train Forecast model",
 				"type": "DatabricksNotebook",
 				"dependsOn": [],
 				"policy": {
@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/02_Incremental_Load_Bronze",
+					"notebookPath": "/Repos/dishadas168@gmail.com/demand-forecasting-ebay-databricks/05_Train_Forecasting_Model_and_Deploy",
 					"baseParameters": {
 						"date": {
 							"value": "@pipeline().parameters.date",
